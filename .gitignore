@@ -1,26 +1,28 @@
+# ---- Confidential trial data: never commit ----
+01_Data/raw/*
+!01_Data/raw/.gitkeep
+01_Data/processed/*
+!01_Data/processed/.gitkeep
+01_Data/external/*
+!01_Data/external/.gitkeep
+
+# Outputs from runs on the synthetic sample
+outputs_sample/
+
 # Python
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
+.pytest_cache/
+*.egg-info/
 
 # Jupyter
 .ipynb_checkpoints/
 
-# IDE
+# IDE / OS
 .vscode/
 .idea/
-
-# Environment
-.env
-
-# Large/raw data
-data/raw/*
-!data/raw/.gitkeep
-
-data/external/*
-!data/external/.gitkeep
-
-# OS files
 .DS_Store
 Thumbs.db
 
+# Environment
+.env

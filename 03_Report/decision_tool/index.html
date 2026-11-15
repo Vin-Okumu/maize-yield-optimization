@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Urea advisory tool · Evergreen maize trial</title>
+<style>
+  .viz-root {
+    color-scheme: light;
+    --surface-0: #f4f3f0; --surface-1: #fcfcfb; --border: #e2e0da;
+    --text-primary: #0b0b0b; --text-secondary: #52514e; --text-muted: #7a7974;
+    --series-1: #2a78d6; --series-2: #eb6834; --grid: #e7e5df;
+    --good: #0f7b3e; --good-bg: #e6f4ea; --warn: #8a5a00; --warn-bg: #fdf3dc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .viz-root {
+      color-scheme: dark;
+      --surface-0: #111110; --surface-1: #1a1a19; --border: #33322f;
+      --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #94938a;
+      --series-1: #3987e5; --series-2: #d95926; --grid: #2c2b28;
+      --good: #5cc98a; --good-bg: #16261c; --warn: #e6b34d; --warn-bg: #2a2214;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .viz-root { background: var(--surface-0); color: var(--text-primary); min-height: 100vh; padding: 32px 20px 48px; }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  h1 { font-size: 24px; margin: 0 0 4px; letter-spacing: -0.01em; }
+  .lede { color: var(--text-secondary); margin: 0 0 24px; max-width: 70ch; }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+  .controls { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; }
+  label { display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
+  select, input[type=number] { font: inherit; color: var(--text-primary); background: var(--surface-0); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; min-width: 150px; }
+  input[type=number] { width: 130px; min-width: 0; }
+  .check { display: flex; gap: 8px; align-items: center; font-size: 14px; color: var(--text-secondary); padding-bottom: 8px; }
+  .rec { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; }
+  .rec .eyebrow { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted); }
+  .rec .name { font-size: 26px; font-weight: 700; margin: 2px 0 6px; }
+  .rec .why { color: var(--text-secondary); margin: 0; }
+  .hero { text-align: right; }
+  .hero .num { font-size: 36px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .hero .unit { color: var(--text-muted); font-size: 13px; }
+  .pill { white-space: nowrap; display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+  .pill.good { background: var(--good-bg); color: var(--good); }
+  .pill.warn { background: var(--warn-bg); color: var(--warn); }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  th, td { padding: 9px 8px; border-bottom: 1px solid var(--border); text-align: right; }
+  th:first-child, td:first-child { text-align: left; }
+  th { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
+  td.muted { color: var(--text-muted); }
+  .note { font-size: 13px; color: var(--text-secondary); margin: 10px 0 0; }
+  .legend { display: flex; gap: 18px; font-size: 13px; color: var(--text-secondary); margin: 0 0 8px; }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+  svg text { fill: var(--text-secondary); font-size: 12px; }
+  #tip { position: fixed; pointer-events: none; background: var(--surface-1); color: var(--text-primary); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 13px; box-shadow: 0 4px 16px rgba(0,0,0,.12); display: none; max-width: 260px; }
+  footer { font-size: 12px; color: var(--text-muted); margin-top: 20px; }
+  @media (max-width: 640px) { .rec { grid-template-columns: 1fr; } .hero { text-align: left; } }
+</style>
+</head>
+<body>
+<div class="viz-root">
+<div class="wrap">
+  <h1>Which Urea strategy should we recommend here?</h1>
+  <p class="lede" id="lede"></p>
+
+  <div class="card controls">
+    <div><label for="me">Mega-environment</label><select id="me"></select></div>
+    <div><label for="scn">Price scenario</label><select id="scn"></select></div>
+    <div><label for="urea">Urea price (RWF/kg)</label><input type="number" id="urea" min="100" step="10"></div>
+    <div><label for="maize">Maize price (RWF/kg)</label><input type="number" id="maize" min="50" step="10"></div>
+    <div class="check"><input type="checkbox" id="useLocal"><label for="useLocal" style="margin:0;text-transform:none;letter-spacing:0;font-size:14px;font-weight:400">Use this environment's own estimate</label></div>
+  </div>
+
+  <div class="card rec">
+    <div>
+      <div class="eyebrow">Recommendation</div>
+      <div class="name" id="recName"></div>
+      <p class="why" id="recWhy"></p>
+    </div>
+    <div class="hero">
+      <div class="num" id="recVcr"></div>
+      <div class="unit">value-cost ratio<br>(extra maize value ÷ extra urea cost)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="legend"><span><i style="background:var(--series-1)"></i>All environments (pooled)</span><span><i style="background:var(--series-2)"></i>Selected environment only</span></div>
+    <svg id="chart" width="100%" height="190" role="img" aria-label="Yield gain over the 50 kg/ha baseline with 95% confidence intervals"></svg>
+    <p class="note">Extra yield over the 50 kg/ha baseline, with 95% confidence intervals. Hover a point for details.</p>
+  </div>
+
+  <div class="card">
+    <table>
+      <thead><tr><th>Treatment</th><th>Extra yield (t/ha)</th><th>Extra urea cost (RWF/ha)</th><th>Extra maize value (RWF/ha)</th><th>Net benefit (RWF/ha)</th><th>VCR</th><th>Verdict</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <p class="note" id="basisNote"></p>
+    <p class="note" id="srcNote"></p>
+  </div>
+
+  <footer id="foot"></footer>
+</div>
+<div id="tip"></div>
+</div>
+<script>
+const D = {"treatments": ["Urea 0.5Kg/Are(V6)", "Urea1kg/Are(Planting+V6)", "Urea 1kg/Are(V6 + V10)", "Urea 1kg/Are(V6)"], "labels": {"Urea 0.5Kg/Are(V6)": "A: 50 kg/ha, all at V6", "Urea1kg/Are(Planting+V6)": "B: 100 kg/ha, planting + V6", "Urea 1kg/Are(V6 + V10)": "C: 100 kg/ha, V6 + V10", "Urea 1kg/Are(V6)": "D: 100 kg/ha, all at V6"}, "baseline": "Urea 0.5Kg/Are(V6)", "extra": {"Urea 0.5Kg/Are(V6)": 0, "Urea1kg/Are(Planting+V6)": 50, "Urea 1kg/Are(V6 + V10)": 50, "Urea 1kg/Are(V6)": 50}, "pooled": {"Urea1kg/Are(Planting+V6)": {"gain": 0.144271159585657, "lo": -0.05583147145384898, "hi": 0.344373790625163, "sig": false}, "Urea 1kg/Are(V6 + V10)": {"gain": 0.5000250626566356, "lo": 0.30039486926381653, "hi": 0.6996552560494547, "sig": true}, "Urea 1kg/Are(V6)": {"gain": 0.5457894736842074, "lo": 0.3461592802913883, "hi": 0.7454196670770264, "sig": true}}, "local": {"Highlands": {"Urea 0.5Kg/Are(V6)": {"gain": 0.0, "lo": null, "hi": null, "n": 142}, "Urea1kg/Are(Planting+V6)": {"gain": 0.11700336231669359, "lo": -0.09312834568171538, "hi": 0.3271350703151026, "n": 142}, "Urea 1kg/Are(V6 + V10)": {"gain": 0.35894366197183314, "lo": 0.15027078842610025, "hi": 0.567616535517566, "n": 142}, "Urea 1kg/Are(V6)": {"gain": 0.48563380281690527, "lo": 0.2769609292711724, "hi": 0.6943066763626382, "n": 142}}, "Low-Mid-Dry": {"Urea 0.5Kg/Are(V6)": {"gain": 0.0, "lo": null, "hi": null, "n": 115}, "Urea1kg/Are(Planting+V6)": {"gain": 0.08582608695651339, "lo": -0.08722235626979571, "hi": 0.25887453018282247, "n": 115}, "Urea 1kg/Are(V6 + V10)": {"gain": 0.3101830779497682, "lo": 0.13663730850212438, "hi": 0.48372884739741195, "n": 115}, "Urea 1kg/Are(V6)": {"gain": 0.49886956521738196, "lo": 0.3258211219910728, "hi": 0.6719180084436911, "n": 115}}, "Low-Mid-Wet": {"Urea 0.5Kg/Are(V6)": {"gain": 0.0, "lo": null, "hi": null, "n": 77}, "Urea1kg/Are(Planting+V6)": {"gain": 0.4228571428571428, "lo": 0.22882113577589794, "hi": 0.6168931499383877, "n": 77}, "Urea 1kg/Are(V6 + V10)": {"gain": 0.7819480519480516, "lo": 0.5879120448668067, "hi": 0.9759840590292965, "n": 77}, "Urea 1kg/Are(V6)": {"gain": 0.8054545454545452, "lo": 0.6114185383733003, "hi": 0.9994905525357901, "n": 77}}, "Transitional": {"Urea 0.5Kg/Are(V6)": {"gain": 0.0, "lo": null, "hi": null, "n": 65}, "Urea1kg/Are(Planting+V6)": {"gain": -0.018615384615383434, "lo": -0.3063568690450615, "hi": 0.26912609981429464, "n": 65}, "Urea 1kg/Are(V6 + V10)": {"gain": 0.06984615384615589, "lo": -0.21789533058352212, "hi": 0.3575876382758339, "n": 65}, "Urea 1kg/Are(V6)": {"gain": 0.45261538461538486, "lo": 0.1648739001857068, "hi": 0.7403568690450629, "n": 65}}}, "me_p": 0.42424504864222734, "threshold": 2.0, "scenarios": [{"name": "Trial period, subsidised urea (2022)", "urea": 754, "maize": 237, "source": "Urea farmer price RWF 754/kg after subsidy (AGRA Price & Policy Monitor, Aug 2022); maize farm-gate floor RWF 237/kg (MINICOM, Feb 2022)"}, {"name": "Trial period, unsubsidised urea (2022)", "urea": 1257, "maize": 237, "source": "Urea market price RWF 1,257/kg before subsidy (AGRA, Aug 2022); maize RWF 237/kg"}, {"name": "Current, subsidised urea (2026)", "urea": 1090, "maize": 400, "source": "Urea farmer price RWF 1,090/kg after 45% subsidy (New Times, Jul 2026); maize farm-gate minimum RWF 400/kg (MINICOM, 2024)"}], "org": "Evergreen", "data_label": "confidential trial data"};
+const $ = id => document.getElementById(id);
+const fmt = (x, d=2) => x == null || isNaN(x) ? "–" : x.toLocaleString(undefined, {minimumFractionDigits:d, maximumFractionDigits:d});
+const rwf = x => isNaN(x) ? "–" : Math.round(x).toLocaleString();
+
+$("lede").textContent = `Decision support for ${D.org} extension teams, based on a three-season Urea trial in Rwanda. ` +
+  `Choose an environment and today's prices; the tool recommends the highest-yielding strategy that is statistically ` +
+  `better than 50 kg/ha and pays back at least ${D.threshold}× its extra cost.`;
+Object.keys(D.local).forEach(m => $("me").add(new Option(m, m)));
+D.scenarios.forEach((s, i) => $("scn").add(new Option(s.name, i)));
+$("scn").add(new Option("Custom prices", "custom"));
+function setScenario() {
+  const v = $("scn").value; if (v === "custom") return;
+  const s = D.scenarios[+v]; $("urea").value = s.urea; $("maize").value = s.maize;
+  $("srcNote").textContent = "Prices: " + s.source + ".";
+}
+$("scn").onchange = () => { setScenario(); render(); };
+["urea", "maize"].forEach(id => $(id).oninput = () => { $("scn").value = "custom"; $("srcNote").textContent = "Prices: entered by user."; render(); });
+$("me").onchange = render; $("useLocal").onchange = render;
+setScenario();
+
+function render() {
+  const me = $("me").value, useLocal = $("useLocal").checked;
+  const urea = +$("urea").value, maize = +$("maize").value;
+  const loc = D.local[me];
+  const rows = D.treatments.filter(t => t !== D.baseline).map(t => {
+    const p = D.pooled[t], l = loc[t];
+    const est = useLocal ? l : p;
+    const sig = useLocal ? (l.lo != null && l.lo > 0) : p.sig;
+    const cost = D.extra[t] * urea, value = est.gain * 1000 * maize;
+    const vcr = cost ? value / cost : NaN;
+    return {t, p, l, est, sig, cost, value, vcr, ok: sig && vcr >= D.threshold};
+  });
+  const ok = rows.filter(r => r.ok).sort((a, b) => b.est.gain - a.est.gain);
+  const pick = ok[0];
+  $("recName").textContent = pick ? D.labels[pick.t] : D.labels[D.baseline];
+  $("recVcr").textContent = pick ? fmt(pick.vcr, 1) + "×" : "–";
+  $("recWhy").textContent = pick
+    ? `+${fmt(pick.est.gain)} t/ha over 50 kg/ha (95% CI ${fmt(pick.est.lo)} to ${fmt(pick.est.hi)}). ` +
+      (ok[1] ? `${D.labels[ok[1].t]} is a reasonable alternative where splitting suits farmers' labour.` : "")
+    : "No 100 kg/ha strategy is both clearly better and profitable at these prices, so stay with 50 kg/ha at V6.";
+  $("basisNote").textContent = useLocal
+    ? `Using only ${me} fields (n = ${loc[D.treatments[3]].n}). Local estimates are less precise; treat them as a check, not the basis for advice.`
+    : `Using the pooled estimate across all environments: treatment effects did not differ significantly by mega-environment (p = ${fmt(D.me_p)}), so the pooled estimate is the more reliable one.`;
+  $("rows").innerHTML = rows.map(r => {
+    const verdict = r.ok ? '<span class="pill good">Meets rule</span>' :
+      (!r.sig ? '<span class="pill warn">Gain not significant</span>' : '<span class="pill warn">Below VCR ' + D.threshold + '</span>');
+    return `<tr><td>${D.labels[r.t]}</td><td>${fmt(r.est.gain)}</td><td>${rwf(r.cost)}</td><td>${rwf(r.value)}</td>` +
+      `<td>${rwf(r.value - r.cost)}</td><td>${fmt(r.vcr, 1)}</td><td>${verdict}</td></tr>`;
+  }).join("");
+  drawChart(rows, me);
+}
+
+function drawChart(rows, me) {
+  const svg = $("chart"), W = svg.clientWidth || 900, H = 190, L = 230, R = 24, T = 10, B = 30;
+  const vals = rows.flatMap(r => [r.p.lo, r.p.hi, r.l.lo, r.l.hi]).filter(v => v != null);
+  const lo = Math.min(-0.2, ...vals), hi = Math.max(1, ...vals);
+  const x = v => L + (v - lo) / (hi - lo) * (W - L - R);
+  const band = (H - T - B) / rows.length;
+  let s = "";
+  for (let g = Math.ceil(lo * 4) / 4; g <= hi; g += 0.25) {
+    s += `<line x1="${x(g)}" x2="${x(g)}" y1="${T}" y2="${H - B}" stroke="var(--grid)" stroke-width="${Math.abs(g) < 1e-9 ? 1.5 : 1}" ${Math.abs(g) < 1e-9 ? 'stroke-dasharray="4 3"' : ""}/>`;
+    s += `<text x="${x(g)}" y="${H - B + 18}" text-anchor="middle">${g.toFixed(2)}</text>`;
+  }
+  rows.forEach((r, i) => {
+    const yc = T + band * i + band / 2;
+    s += `<text x="${L - 12}" y="${yc + 4}" text-anchor="end">${D.labels[r.t]}</text>`;
+    [[r.p, -9, "var(--series-1)", "All environments"], [r.l, 9, "var(--series-2)", me]].forEach(([e, dy, c, who]) => {
+      if (e.lo != null) s += `<line x1="${x(e.lo)}" x2="${x(e.hi)}" y1="${yc + dy}" y2="${yc + dy}" stroke="${c}" stroke-width="2" stroke-linecap="round"/>`;
+      const tip = `${who}<br><b>${D.labels[r.t]}</b><br>+${fmt(e.gain)} t/ha (CI ${fmt(e.lo)} to ${fmt(e.hi)})`;
+      s += `<circle cx="${x(e.gain)}" cy="${yc + dy}" r="5" fill="${c}" stroke="var(--surface-1)" stroke-width="2"/>`;
+      s += `<rect x="${x(e.lo ?? e.gain) - 6}" y="${yc + dy - 9}" width="${Math.max(12, x(e.hi ?? e.gain) - x(e.lo ?? e.gain) + 12)}" height="18" fill="transparent" data-tip="${tip.replace(/"/g, "&quot;")}"/>`;
+    });
+  });
+  svg.innerHTML = s;
+  svg.querySelectorAll("[data-tip]").forEach(el => {
+    el.onmousemove = ev => { const t = $("tip"); t.innerHTML = el.dataset.tip; t.style.display = "block"; t.style.left = ev.clientX + 14 + "px"; t.style.top = ev.clientY + 14 + "px"; };
+    el.onmouseleave = () => $("tip").style.display = "none";
+  });
+}
+$("foot").textContent = `Estimates from linear mixed-effects models (field as random effect). Built from the ${D.data_label}. ` +
+  `VCR ignores labour and transport; a VCR of at least 2 is a common threshold for smallholder adoption.`;
+window.addEventListener("resize", render);
+render();
+</script>
+</body>
+</html>

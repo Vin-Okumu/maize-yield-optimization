@@ -1,0 +1,109 @@
+{
+  "data": "confidential trial data",
+  "plots": 1598,
+  "plots_in_model": 1593,
+  "field_seasons_in_model": 399,
+  "adjusted_means": {
+    "Urea 0.5Kg/Are(V6)": 4.571,
+    "Urea1kg/Are(Planting+V6)": 4.715,
+    "Urea 1kg/Are(V6 + V10)": 5.071,
+    "Urea 1kg/Are(V6)": 5.117
+  },
+  "gains": {
+    "Urea1kg/Are(Planting+V6)": {
+      "gain_vs_baseline": 0.1443,
+      "ci_low": -0.0558,
+      "ci_high": 0.3444,
+      "gain_pct": 3.1561,
+      "p_holm": 0.3152
+    },
+    "Urea 1kg/Are(V6 + V10)": {
+      "gain_vs_baseline": 0.5,
+      "ci_low": 0.3004,
+      "ci_high": 0.6997,
+      "gain_pct": 10.9387,
+      "p_holm": 0.0
+    },
+    "Urea 1kg/Are(V6)": {
+      "gain_vs_baseline": 0.5458,
+      "ci_low": 0.3462,
+      "ci_high": 0.7454,
+      "gain_pct": 11.9398,
+      "p_holm": 0.0
+    }
+  },
+  "c_vs_d_p_holm": 0.6531993612921131,
+  "interactions": {
+    "Treatment x meg_env": 0.4242,
+    "Treatment x season": 0.1028
+  },
+  "model_comparison": [
+    {
+      "model": "Random forest",
+      "MAE": 1.289,
+      "RMSE": 1.941,
+      "R2": 0.205,
+      "n_plots": 1598,
+      "outlier_excluded": false
+    },
+    {
+      "model": "Ridge regression",
+      "MAE": 1.295,
+      "RMSE": 1.962,
+      "R2": 0.188,
+      "n_plots": 1598,
+      "outlier_excluded": false
+    },
+    {
+      "model": "Mean baseline",
+      "MAE": 1.532,
+      "RMSE": 2.182,
+      "R2": -0.004,
+      "n_plots": 1598,
+      "outlier_excluded": false
+    }
+  ],
+  "model_comparison_excl_implausible": [
+    {
+      "model": "Random forest",
+      "MAE": 1.219,
+      "RMSE": 1.536,
+      "R2": 0.318,
+      "n_plots": 1597,
+      "outlier_excluded": true
+    },
+    {
+      "model": "Ridge regression",
+      "MAE": 1.259,
+      "RMSE": 1.588,
+      "R2": 0.272,
+      "n_plots": 1597,
+      "outlier_excluded": true
+    },
+    {
+      "model": "Mean baseline",
+      "MAE": 1.503,
+      "RMSE": 1.865,
+      "R2": -0.004,
+      "n_plots": 1597,
+      "outlier_excluded": true
+    }
+  ],
+  "economics": [
+    {
+      "scenario": "Trial period, subsidised urea (2022)",
+      "vcr": 3.43,
+      "net_benefit_rwf_ha": 91652.11
+    },
+    {
+      "scenario": "Trial period, unsubsidised urea (2022)",
+      "vcr": 2.06,
+      "net_benefit_rwf_ha": 66502.11
+    },
+    {
+      "scenario": "Current, subsidised urea (2026)",
+      "vcr": 4.01,
+      "net_benefit_rwf_ha": 163815.79
+    }
+  ]
+}
