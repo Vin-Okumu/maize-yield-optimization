@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.2 · November 2026
+
+- **All published results now come from the synthetic sample.** README, analysis report, project charter, data documents, client deck, notebooks, figures, tables, map, decision tool and audit log were regenerated or updated so every number matches the notebook outputs.
+- Notebook and pipeline outputs are always written to the repository's report folders (no separate `outputs_sample/` folder).
+- Enrichment downloads in notebook 05 are switched off for the synthetic sample, whose coordinates are made up.
+- The mixed model drops variables that take a single value (DAP in the synthetic sample) instead of reporting a meaningless estimate.
+
 ## 2.0.0 · November 2026
 
 A restructure to bring the project to a professional, reproducible standard.

@@ -1,7 +1,7 @@
 """Run the full analysis end to end.
 
     python run_pipeline.py                 # real data if 01_Data/raw/ has the files, else the synthetic sample
-    python run_pipeline.py --data sample   # force the synthetic sample (outputs go to outputs_sample/)
+    python run_pipeline.py --data sample   # force the synthetic sample
     python run_pipeline.py --fast          # skip the slow permutation-importance step
 
 Steps: prepare data -> audit log -> treatment effects -> per-environment results

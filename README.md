@@ -17,6 +17,8 @@
   <img src="https://img.shields.io/badge/license-MIT-lightgrey">
 </p>
 
+> **About the data.** The original trial data is confidential, so this repository runs on a **synthetic dataset** with the same structure, variables and data-quality problems (`01_Data/sample/`). Every number and chart below comes from running the notebooks on that synthetic data. The results show the method and the deliverables; they are not Evergreen's actual findings.
+
 ---
 
 ## At a glance
@@ -24,12 +26,12 @@
 | | |
 |---|---|
 | **Client question** | Which of four Urea rate-and-timing strategies should Evergreen's extension officers recommend? |
-| **Data** | 1,598 trial plots · 401 field-seasons · 3 seasons (21A, 22A, 22B) · 4 mega-environments |
-| **Answer** | Apply **100 kg/ha of Urea, all at the V6 stage**: **+0.55 t/ha (≈ +12%)** over the current 50 kg/ha, statistically significant, best in **all four** mega-environments |
+| **Data** | 1,590 trial plots · 397 field-seasons · 3 seasons (21A, 22A, 22B) · 4 mega-environments *(synthetic)* |
+| **Answer** | Apply **100 kg/ha of Urea, all at the V6 stage**: **+0.55 t/ha (≈ +11%)** over the current 50 kg/ha, statistically significant, best in **all four** mega-environments |
 | **Does it pay?** | Yes. Every franc spent on the extra Urea returns **3.4 francs** of maize at trial-period prices (**4.0** at 2026 prices) |
-| **Also good** | Splitting 100 kg/ha between V6 and V10 is statistically equivalent overall (p = 0.65) |
-| **Drop** | Splitting between planting and V6: small gain that doesn't cover its cost |
-| **Deliverables** | [Analysis report](03_Report/analysis_report.md) · [Decision-support tool](03_Report/decision_tool/index.html) · [Field map](03_Report/maps/trial_fields_map.html) · [Project charter](00_Project_Management/project_charter.md) · [Data audit log](01_Data/audit/data_audit_log.md) · [Client deck](03_Report/reports/Maize_Yield_Client_Deck.pptx) |
+| **Also good** | Splitting 100 kg/ha between V6 and V10 is statistically equivalent overall (p = 1.00) |
+| **Drop** | Splitting between planting and V6: almost no gain (+0.05 t/ha) and it doesn't cover its cost |
+| **Deliverables** | [Decision-support tool](03_Report/decision_tool/index.html) · [Field map](03_Report/maps/trial_fields_map.html) · [Project charter](00_Project_Management/project_charter.md) · [Data audit log](01_Data/audit/data_audit_log.md) · [Analysis report](03_Report/analysis_report.md) · [Client deck](03_Report/reports/Maize_Yield_Client_Deck.pptx) |
 
 ---
 
@@ -39,16 +41,16 @@
   <img src="03_Report/figures/treatment_gains_vs_baseline.png" width="85%" alt="Adjusted yield gain of each treatment over 50 kg/ha at V6, with 95% confidence intervals">
 </p>
 
-| Treatment | Adjusted mean yield | Gain vs. 50 kg/ha | Significant? (Holm) | Value-cost ratio* |
+| Treatment | Adjusted mean yield | Gain vs. 50 kg/ha (95% CI) | Significant? (Holm) | Value-cost ratio* |
 |---|---:|---:|:---:|---:|
-| A · 50 kg/ha, all at V6 (current) | 4.57 t/ha | – | – | – |
-| B · 100 kg/ha, planting + V6 | 4.72 t/ha | +0.14 t/ha | No | 0.9 |
-| C · 100 kg/ha, V6 + V10 | 5.07 t/ha | +0.50 t/ha | Yes | 3.1 |
-| **D · 100 kg/ha, all at V6** | **5.12 t/ha** | **+0.55 t/ha** | **Yes** | **3.4** |
+| A · 50 kg/ha, all at V6 (current) | 4.94 t/ha | – | – | – |
+| B · 100 kg/ha, planting + V6 | 4.99 t/ha | +0.05 (−0.15 to 0.26) | No | 0.3 |
+| C · 100 kg/ha, V6 + V10 | 5.44 t/ha | +0.50 (0.29 to 0.70) | Yes | 3.1 |
+| **D · 100 kg/ha, all at V6** | **5.49 t/ha** | **+0.55 (0.34 to 0.75)** | **Yes** | **3.4** |
 
-<sub>*Value of extra maize ÷ cost of extra Urea at 2022 prices (Urea RWF 754/kg subsidised, maize RWF 237/kg). ≥ 2 is a common adoption threshold.</sub>
+<sub>*Value of extra maize ÷ cost of extra Urea at 2022 prices (Urea RWF 754/kg subsidised, maize RWF 237/kg). ≥ 2 is a common adoption threshold. Model: 1,582 plots in 397 field-seasons.</sub>
 
-**One recommendation works everywhere.** Treatment D ranked first in every mega-environment, and treatment effects did not differ significantly by environment (p = 0.42) or season (p = 0.10).
+**One recommendation works everywhere.** Treatment D ranked first in every mega-environment, and treatment effects did not differ significantly by environment (p = 0.08) or season (p = 0.10). Within the Highlands and Low-Mid-Dry zones, D also edged out the V6 + V10 split (p ≈ 0.05); elsewhere the two were tied.
 
 <p align="center">
   <img src="03_Report/figures/per_environment_gains.png" width="100%" alt="Gain over baseline by mega-environment">
@@ -72,13 +74,13 @@ Download the file and open it in any browser, or enable GitHub Pages to share a 
 ## What I did
 
 1. **Scoped the work** in a [project charter](00_Project_Management/project_charter.md): objectives, deliverables, assumptions, risks and stakeholders.
-2. **Audited the data.** 22 automated checks are logged in a [data audit log](01_Data/audit/data_audit_log.md) that is regenerated from the data on every run. Findings include orphan plots, incomplete units, season-specific missingness, a 50.1 t/ha entry error and GPS altitudes of 0 m.
-3. **Cleaned without losing information.** Raw data is untouched, problems are flagged rather than deleted, and every join is validated. Output: one combined dataset, one row per plot.
+2. **Audited the data.** 22 automated checks are logged in a [data audit log](01_Data/audit/data_audit_log.md) that is regenerated from the data on every run. Findings include orphan plots, incomplete units, season-specific missingness, a 55 t/ha entry error and GPS altitudes of 0 m.
+3. **Cleaned without losing information.** Source data is untouched, problems are flagged rather than deleted, and every join is validated. Output: one combined dataset, one row per plot.
 4. **Estimated treatment effects properly.** A linear mixed-effects model with field as a random effect, Holm-corrected pairwise tests, likelihood-ratio interaction tests, per-environment models and an outlier sensitivity check.
 5. **Ranked the yield drivers and built a prediction model.** Random Forest vs. Ridge vs. baseline with **grouped cross-validation** (whole fields held out), plus permutation importance on unseen fields.
 6. **Tested profitability** with a value-cost ratio under three published price scenarios.
 7. **Turned it into advice:** a decision rule, an interactive tool, a [written report](03_Report/analysis_report.md) and a client deck.
-8. **Made it reproducible.** One command rebuilds every table and figure, tests run on synthetic data, and enrichment scripts handle CHIRPS rainfall and SoilGrids soil data.
+8. **Made it reproducible.** The notebooks and one pipeline command rebuild every table and figure, tests run on the synthetic data, and enrichment scripts handle CHIRPS rainfall and SoilGrids soil data.
 
 ## What drives yield?
 
@@ -86,12 +88,12 @@ Download the file and open it in any browser, or enable GitHub Pages to share a 
   <img src="03_Report/figures/driver_importance.png" width="75%" alt="Permutation importance of yield drivers">
 </p>
 
-Field conditions matter far more than the Urea choice. **Flat fields averaged about 2 t/ha more than steep ones**, which is four times the gain from the best treatment. The Urea effect is real and consistent, but advice should pair it with good agronomy.
+**Mega-environment dominates**: Low-Mid-Dry fields yield about 1.2–1.4 t/ha more than the rest. Seed rate, soil colour, slope and season follow far behind, and the Urea treatment ranks 7th of 18. In this synthetic data, yields were simulated from mega-environment, season, treatment and field effects, so the ranking mostly reflects how the data was built. With real trial data, this same analysis is what reveals which site and management factors matter.
 
 ## About the limits
 
-- **Prediction is moderate.** The Random Forest beats the baseline (MAE 1.29 vs 1.53 t/ha on unseen fields) but explains about 21% of the variance (32% without the entry-error plot). It is useful for setting expectations, not for forecasting a single farm.
-- **Weather and soil enrichment must run locally.** The CHIRPS and SoilGrids scripts are ready (cached, rate-limited, resumable) and the pipeline picks up their output automatically.
+- **Prediction is weak on this data.** Ridge regression and the Random Forest only just beat predicting the average (MAE 1.25 and 1.27 vs 1.29 t/ha on unseen fields; R² ≈ 0.03, or 0.09 without the entry-error plot). The synthetic fields carry little predictive information beyond environment and treatment, so the honest conclusion is: useful for setting expectations, not for forecasting a single farm.
+- **Weather and soil enrichment run locally.** The CHIRPS and SoilGrids scripts are cached, rate-limited and resumable, and the pipeline picks up their output automatically. They are switched off for the synthetic sample, whose coordinates are made up.
 - **The economics is a partial budget.** Labour and transport costs are not included.
 
 <details>
@@ -99,9 +101,10 @@ Field conditions matter far more than the Urea choice. **Flat fields averaged ab
 
 | Model (grouped 5-fold CV) | MAE (t/ha) | RMSE (t/ha) | R² |
 |---|---:|---:|---:|
-| Random Forest | 1.289 | 1.941 | 0.205 |
-| Ridge Regression | 1.295 | 1.962 | 0.188 |
-| Mean baseline | 1.532 | 2.182 | -0.004 |
+| Ridge Regression | 1.252 | 1.994 | 0.032 |
+| Random Forest | 1.269 | 2.015 | 0.011 |
+| Mean baseline | 1.286 | 2.032 | −0.005 |
+| *Random Forest, without the 55 t/ha entry error* | *1.201* | *1.520* | *0.094* |
 
 <table>
   <tr>
@@ -110,7 +113,7 @@ Field conditions matter far more than the Urea choice. **Flat fields averaged ab
   </tr>
   <tr>
     <td width="50%"><img src="03_Report/figures/rf_observed_vs_predicted.png" width="100%"><br><sub>Observed vs. predicted yield (unseen fields)</sub></td>
-    <td width="50%"><img src="03_Report/figures/trial_fields_map.png" width="100%"><br><sub>Trial fields by season</sub></td>
+    <td width="50%"><img src="03_Report/figures/trial_fields_map.png" width="100%"><br><sub>Trial fields by season (synthetic locations)</sub></td>
   </tr>
 </table>
 </details>
@@ -143,7 +146,7 @@ pytest -q                   # runs the tests
 jupyter lab                 # notebooks 01 → 07
 ```
 
-**About the data.** The trial data is confidential and is **not** in this repository. Without it, everything runs on a **synthetic sample** (`01_Data/sample/`) with the same structure and data-quality problems, so the numbers will differ from those above. With access to the real files, put them in `01_Data/raw/` and they are picked up automatically. See [`01_Data/README.md`](01_Data/README.md).
+Everything runs on the **synthetic sample** in `01_Data/sample/` and reproduces the numbers above. Anyone with access to the confidential trial files can put them in `01_Data/raw/`, and they are picked up automatically. See [`01_Data/README.md`](01_Data/README.md).
 
 **Optional enrichment** (needs internet):
 ```bash
@@ -161,7 +164,7 @@ maize-yield-optimization/
 ├── 00_Project_Management/   project charter
 ├── 01_Data/
 │   ├── raw/                 confidential source files (git-ignored)
-│   ├── sample/              synthetic stand-in data
+│   ├── sample/              synthetic data used for all published results
 │   ├── processed/           cleaned + combined dataset (generated, git-ignored)
 │   ├── external/            CHIRPS / SoilGrids extracts (generated, git-ignored)
 │   ├── audit/               data audit log (.md + .csv)
@@ -169,7 +172,7 @@ maize-yield-optimization/
 ├── 02_Notebooks/            01–07 analysis walkthrough
 ├── 03_Report/
 │   ├── analysis_report.md
-│   ├── figures/  tables/  maps/
+│   ├── figures/  tables/  maps/   (from the synthetic sample)
 │   ├── decision_tool/       offline HTML advisory tool
 │   └── reports/             client deck
 ├── 04_Images/               banners

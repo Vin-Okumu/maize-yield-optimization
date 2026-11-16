@@ -208,6 +208,8 @@ def agronomic_drivers(df: pd.DataFrame, predictors: list[str] | None = None) -> 
     predictors = predictors or ["compost_tha", "seeds_kgha", "dap_kgha", "germination_rate"]
     predictors = [p for p in predictors if p in df and df[p].notna().any()]
     sub = df.dropna(subset=predictors).copy()
+    # a variable with a single value (e.g. DAP when every plot got 100 kg/ha) cannot be estimated
+    predictors = [p for p in predictors if sub[p].nunique() > 1]
     formula = BASE_FORMULA + " + " + " + ".join(predictors)
     fit = _fit(sub, formula)
     rows = []

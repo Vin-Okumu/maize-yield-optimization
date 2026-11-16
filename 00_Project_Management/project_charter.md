@@ -14,11 +14,13 @@ Evergreen supports smallholder maize farmers in Rwanda through input supply and 
 
 Each participating farmer split one maize field into four plots, and each plot received one of four Urea treatments. Data was collected at three levels:
 
-| Level | Content | Records |
+| Level | Content | Records* |
 |---|---|---:|
-| Field | Location, mega-environment, landscape, soil observations, farmer information | 399 field-seasons |
-| Plot | Treatment, inputs, growth-stage dates, grain yield | 1,598 plots |
-| Soil | Plot soil measurements (pH only; N, organic C and sand empty) | 736 plots |
+| Field | Location, mega-environment, landscape, soil observations, farmer information | 397 field-seasons |
+| Plot | Treatment, inputs, growth-stage dates, grain yield | 1,590 plots |
+| Soil | Plot soil measurements (pH only; N, organic C and sand empty) | 685 plots |
+
+<sub>*Counts for the synthetic dataset published in this repository, which mirrors the structure of the confidential trial data.</sub>
 
 ## 2. Problem statement
 
@@ -109,7 +111,7 @@ All plots also received DAP at 100 kg/ha at planting.
 ## 8. Assumptions
 
 1. **Treatments were applied as recorded.** Where the V10 date is missing but a V10 quantity is recorded (115 plots, all in 22A), the application is assumed to have happened.
-2. **The 50.1 t/ha yield is an entry error** (probably 5.01). It is kept in the main analysis and every key result is also reported without it.
+2. **The 55 t/ha yield is an entry error** (probably 5.5). It is kept in the main analysis and every key result is also reported without it.
 3. **Mega-environment is the right unit for targeting advice.** It is the stratification Evergreen used when designing the trial.
 4. **Missing field variables are missing by design.** Several were not collected in later seasons, so they are not imputed in the treatment models.
 5. **Prices.** The economics uses trial-period (2022) and current (2026) Rwandan prices from published sources, with subsidised and unsubsidised Urea. The decision tool lets users enter their own prices.
@@ -120,8 +122,8 @@ All plots also received DAP at 100 kg/ha at planting.
 | Risk / constraint | Impact | Mitigation |
 |---|---|---|
 | Trial data is confidential | Data cannot be published or uploaded to external services | Data stays in `01_Data/raw/` (git-ignored); repository ships a synthetic sample; published maps round coordinates to ~1 km |
-| Soil measured on only 46% of plots, unevenly by season | Soil-based conclusions could be biased | Soil pH used only in soil-specific checks; SoilGrids used for full coverage |
-| One implausible yield (50.1 t/ha) | Inflates variance; shifts the V6+V10 estimate | Sensitivity analysis with and without it |
+| Soil measured on only 43% of plots, unevenly by season | Soil-based conclusions could be biased | Soil pH used only in soil-specific checks; SoilGrids used for full coverage |
+| One implausible yield (55 t/ha) | Inflates variance; shifts the V6+V10 estimate | Sensitivity analysis with and without it |
 | SoilGrids / CHIRPS services unavailable or slow | Enrichment delayed | Cached, resumable scripts with alternative access routes |
 | Treatment × environment effects are hard to detect with ~65–140 fields per environment | Small local differences could be missed | Report per-environment estimates with CIs alongside the pooled result |
 | Yield-only advice may not be profitable | Farmers lose money | Value-cost ratio with a 2.0 adoption threshold |
@@ -132,7 +134,7 @@ All plots also received DAP at 100 kg/ha at planting.
 |---|---|---|
 | Run CHIRPS rainfall enrichment | Analyst | `python scripts/fetch_chirps_rainfall.py` on a machine with internet access, then re-run the pipeline |
 | Run SoilGrids enrichment | Analyst | `python scripts/fetch_soilgrids.py` (about 5 requests per minute; cached) |
-| Confirm the 50.1 t/ha record and the 3 plots where R3 is recorded before silking | Field / M&E team | Check paper forms or enumerator notes |
+| Confirm the 55 t/ha record and the 3 plots where R3 is recorded before silking | Field / M&E team | Check paper forms or enumerator notes |
 | Confirm whether V10 Urea was applied in 22A | Field / M&E team | Check distribution records |
 
 ## 11. Approval

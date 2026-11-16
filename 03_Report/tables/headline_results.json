@@ -1,109 +1,109 @@
 {
-  "data": "confidential trial data",
-  "plots": 1598,
-  "plots_in_model": 1593,
-  "field_seasons_in_model": 399,
+  "data": "synthetic sample data",
+  "plots": 1590,
+  "plots_in_model": 1582,
+  "field_seasons_in_model": 397,
   "adjusted_means": {
-    "Urea 0.5Kg/Are(V6)": 4.571,
-    "Urea1kg/Are(Planting+V6)": 4.715,
-    "Urea 1kg/Are(V6 + V10)": 5.071,
-    "Urea 1kg/Are(V6)": 5.117
+    "Urea 0.5Kg/Are(V6)": 4.942,
+    "Urea1kg/Are(Planting+V6)": 4.994,
+    "Urea 1kg/Are(V6 + V10)": 5.44,
+    "Urea 1kg/Are(V6)": 5.49
   },
   "gains": {
     "Urea1kg/Are(Planting+V6)": {
-      "gain_vs_baseline": 0.1443,
-      "ci_low": -0.0558,
-      "ci_high": 0.3444,
-      "gain_pct": 3.1561,
-      "p_holm": 0.3152
+      "gain_vs_baseline": 0.052,
+      "ci_low": -0.1528,
+      "ci_high": 0.2568,
+      "gain_pct": 1.0524,
+      "p_holm": 1.0
     },
     "Urea 1kg/Are(V6 + V10)": {
-      "gain_vs_baseline": 0.5,
-      "ci_low": 0.3004,
-      "ci_high": 0.6997,
-      "gain_pct": 10.9387,
+      "gain_vs_baseline": 0.4985,
+      "ci_low": 0.2945,
+      "ci_high": 0.7024,
+      "gain_pct": 10.087,
       "p_holm": 0.0
     },
     "Urea 1kg/Are(V6)": {
-      "gain_vs_baseline": 0.5458,
-      "ci_low": 0.3462,
-      "ci_high": 0.7454,
-      "gain_pct": 11.9398,
+      "gain_vs_baseline": 0.5485,
+      "ci_low": 0.3443,
+      "ci_high": 0.7526,
+      "gain_pct": 11.0988,
       "p_holm": 0.0
     }
   },
-  "c_vs_d_p_holm": 0.6531993612921131,
+  "c_vs_d_p_holm": 1.0,
   "interactions": {
-    "Treatment x meg_env": 0.4242,
-    "Treatment x season": 0.1028
+    "Treatment x meg_env": 0.0816,
+    "Treatment x season": 0.0995
   },
   "model_comparison": [
     {
-      "model": "Random forest",
-      "MAE": 1.289,
-      "RMSE": 1.941,
-      "R2": 0.205,
-      "n_plots": 1598,
+      "model": "Ridge regression",
+      "MAE": 1.252,
+      "RMSE": 1.994,
+      "R2": 0.032,
+      "n_plots": 1590,
       "outlier_excluded": false
     },
     {
-      "model": "Ridge regression",
-      "MAE": 1.295,
-      "RMSE": 1.962,
-      "R2": 0.188,
-      "n_plots": 1598,
+      "model": "Random forest",
+      "MAE": 1.269,
+      "RMSE": 2.015,
+      "R2": 0.011,
+      "n_plots": 1590,
       "outlier_excluded": false
     },
     {
       "model": "Mean baseline",
-      "MAE": 1.532,
-      "RMSE": 2.182,
-      "R2": -0.004,
-      "n_plots": 1598,
+      "MAE": 1.286,
+      "RMSE": 2.032,
+      "R2": -0.005,
+      "n_plots": 1590,
       "outlier_excluded": false
     }
   ],
   "model_comparison_excl_implausible": [
     {
       "model": "Random forest",
-      "MAE": 1.219,
-      "RMSE": 1.536,
-      "R2": 0.318,
-      "n_plots": 1597,
+      "MAE": 1.201,
+      "RMSE": 1.52,
+      "R2": 0.094,
+      "n_plots": 1589,
       "outlier_excluded": true
     },
     {
       "model": "Ridge regression",
-      "MAE": 1.259,
-      "RMSE": 1.588,
-      "R2": 0.272,
-      "n_plots": 1597,
+      "MAE": 1.211,
+      "RMSE": 1.537,
+      "R2": 0.073,
+      "n_plots": 1589,
       "outlier_excluded": true
     },
     {
       "model": "Mean baseline",
-      "MAE": 1.503,
-      "RMSE": 1.865,
-      "R2": -0.004,
-      "n_plots": 1597,
+      "MAE": 1.253,
+      "RMSE": 1.601,
+      "R2": -0.005,
+      "n_plots": 1589,
       "outlier_excluded": true
     }
   ],
   "economics": [
     {
       "scenario": "Trial period, subsidised urea (2022)",
-      "vcr": 3.43,
-      "net_benefit_rwf_ha": 91652.11
+      "vcr": 3.45,
+      "net_benefit_rwf_ha": 92285.07
     },
     {
       "scenario": "Trial period, unsubsidised urea (2022)",
-      "vcr": 2.06,
-      "net_benefit_rwf_ha": 66502.11
+      "vcr": 2.07,
+      "net_benefit_rwf_ha": 67135.07
     },
     {
       "scenario": "Current, subsidised urea (2026)",
-      "vcr": 4.01,
-      "net_benefit_rwf_ha": 163815.79
+      "vcr": 4.03,
+      "net_benefit_rwf_ha": 164884.09
     }
   ]
 }

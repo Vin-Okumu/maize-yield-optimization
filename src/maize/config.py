@@ -117,19 +117,16 @@ class OutputPaths:
 
 
 def output_paths(mode: str | None = None) -> OutputPaths:
-    """Real-data results go to the report folders; sample runs go to outputs_sample/ (git-ignored)."""
-    mode = mode or data_mode()
-    if mode == "raw":
-        return OutputPaths(
-            processed=DATA_DIR / "processed",
-            audit=DATA_DIR / "audit",
-            figures=ROOT / "03_Report" / "figures",
-            tables=ROOT / "03_Report" / "tables",
-            maps=ROOT / "03_Report" / "maps",
-            tools=ROOT / "03_Report" / "decision_tool",
-        ).make()
-    base = ROOT / "outputs_sample"
+    """Results always go to the repository's report folders, whichever data source is used.
+
+    The published results come from the synthetic sample. Anyone running with the confidential
+    data in 01_Data/raw/ will overwrite them with real-data results, so don't commit those.
+    """
     return OutputPaths(
-        processed=base / "processed", audit=base / "audit", figures=base / "figures",
-        tables=base / "tables", maps=base / "maps", tools=base / "decision_tool",
+        processed=DATA_DIR / "processed",
+        audit=DATA_DIR / "audit",
+        figures=ROOT / "03_Report" / "figures",
+        tables=ROOT / "03_Report" / "tables",
+        maps=ROOT / "03_Report" / "maps",
+        tools=ROOT / "03_Report" / "decision_tool",
     ).make()

@@ -1,10 +1,10 @@
 check,result
-Rows (plots),1598
+Rows (plots),1590
 Columns,75
 Duplicate plot_id,0
 Missing yield,0
 Missing treatment,0
-Plots without field record,5
-Plots with soil record,736
+Plots without field record,8
+Plots with soil record,685
 Plots in incomplete units,14
 Implausible yields flagged,1
