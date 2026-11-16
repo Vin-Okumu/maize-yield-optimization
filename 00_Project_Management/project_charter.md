@@ -1,4 +1,4 @@
-# Project charter
+<h1 align="center">Project charter</h1>
 
 **Project:** Urea rate and timing for maize in Rwanda: trial analysis and extension advisory  
 **Client:** Evergreen, Global Research & Development (R&D)  

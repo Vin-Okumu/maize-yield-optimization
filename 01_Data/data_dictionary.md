@@ -1,4 +1,4 @@
-# Data dictionary
+<h1 align="center"> Data dictionary </h1>
 
 ## Field level (`Field_Level.csv`): one row per field per season
 
