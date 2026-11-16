@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="04_Images/project_banner_2.png" width="100%" alt="Optimizing nitrogen application strategies for maize yield in Rwanda">
+  <img src="04_Images/Cover.png" width="100%" alt="Optimizing nitrogen application strategies for maize yield in Rwanda">
 </p>
 
 <h1 align="center">Which fertilizer strategy actually raises maize yield?</h1>
