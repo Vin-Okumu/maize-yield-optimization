@@ -1,7 +1,7 @@
 # Data audit log
 
 *Project:* Rwanda maize–Urea trial analysis for Evergreen  
-*Generated:* 15 November 2026 by `run_pipeline.py` from the confidential trial data  
+*Generated:* 15 November 2026 by `run_pipeline.py` from the synthetic sample data  
 *Source of truth:* this file is rebuilt from the data on every run (`src/maize/audit.py`), so the counts always match the dataset.
 
 ## Summary
@@ -13,7 +13,7 @@
 | Low | 10 |
 | Info | 2 |
 
-**Open items:** 2 - AUD-20, AUD-22
+**Open items:** 1 - AUD-22
 
 ## Data lineage
 
@@ -28,28 +28,28 @@ CHIRPS rainfall + SoilGrids (optional, scripts/fetch_*.py) ─────┘
 
 | ID | Area | Dataset | Check | Finding | Affected | Severity | Decision | Status |
 |---|---|---|---|---|---:|---|---|---|
-| AUD-01 | Structure | All | Row counts per table | 399 field, 1,598 plot and 736 soil records | 0 | Info | Use as baseline counts for every later check | Confirmed - no issue |
+| AUD-01 | Structure | All | Row counts per table | 397 field, 1,590 plot and 685 soil records | 0 | Info | Use as baseline counts for every later check | Confirmed - no issue |
 | AUD-02 | Structure | Field, Plot | Key uniqueness and complete-row duplicates | 0 duplicate field keys, 0 duplicate plot IDs, 0 duplicate rows | 0 | Low | Field grain = block_id + season; plot grain = plot_id | Confirmed - no issue |
-| AUD-03 | Integrity | Plot -> Field | Every plot has a field record | 5 plots in 2 field-season units have no field record (block_id absent from Field_Level) | 5 | High | Keep the plots; flag has_field_match = False | Resolved |
+| AUD-03 | Integrity | Plot -> Field | Every plot has a field record | 8 plots in 2 field-season units have no field record (block_id absent from Field_Level) | 8 | High | Keep the plots; flag has_field_match = False | Resolved |
 | AUD-04 | Integrity | Soil -> Plot | Every soil record matches a plot | 0 soil records without a matching plot | 0 | Low | No action needed | Confirmed - no issue |
-| AUD-05 | Design | Plot | Four plots / four treatments per field-season unit | 396/401 (98.8%) units complete; 5 units have 2-3 treatments (14 plots) | 14 | Medium | Keep observed plots; flag_incomplete_unit; never create placeholder plots | Resolved |
-| AUD-06 | Design | Plot | Treatment balance | Four treatments, 397-401 plots each | 0 | Info | No action | Confirmed - no issue |
+| AUD-05 | Design | Plot | Four plots / four treatments per field-season unit | 394/399 (98.7%) units complete; 5 units have 2-3 treatments (14 plots) | 14 | Medium | Keep observed plots; flag_incomplete_unit; never create placeholder plots | Resolved |
+| AUD-06 | Design | Plot | Treatment balance | Four treatments, 394-399 plots each | 0 | Info | No action | Confirmed - no issue |
 | AUD-07 | Dates | Plot | Data types | 7 date columns stored as text; all non-missing values parse as m/d/Y | 0 | Low | Add *_parsed datetime columns; keep original text | Confirmed - no issue |
 | AUD-08 | Dates | Plot | Growth-stage dates in a plausible order | 3 violations (R3 before silking: 3) | 3 | Medium | Keep and flag; exclude flagged plots from date-based variables only | Resolved |
 | AUD-09 | Dates | Plot | Missing values | 9 plots have no silking date | 9 | Low | Leave missing; affects days-to-silking and rainfall window only | Resolved |
-| AUD-10 | Dates | Plot | Missing values | 6 plots have no R3 date | 6 | Low | Leave missing; affects days-to-silking and rainfall window only | Resolved |
-| AUD-11 | Dates | Plot | V10 date present when a V10 dose is recorded | 115/401 (28.7%) V6+V10 plots lack a V10 date but have a quantity (22A: 115) | 115 | Medium | Keep missing dates; do not infer dates from quantities | Resolved |
-| AUD-12 | Values | Plot | Total = planting + V6 + V10 | 162 plots differ from the calculated total (range -1 to +1 kg/ha) | 162 | Low | Keep source total; add urea_total_calc and urea_total_diff | Resolved |
-| AUD-13 | Values | Plot | Yield plausibility (> 20 t/ha) | 1 plot(s) at 50.1 t/ha (next highest 10.9); likely a misplaced decimal point | 1 | High | Keep in the main analysis; report results with and without it | Resolved |
-| AUD-14 | Values | Field | Altitude plausibility (< 900 m) | 3 fields recorded at 0.26, 0.26, 0 m; Rwanda's lowest point is about 950 m (probable GPS default) | 3 | Medium | Set alt_clean to missing for these fields; keep original alt | Resolved |
-| AUD-15 | Values | Plot | Consistent category labels | 'Maize' and 'maize' both used (1089 plots capitalised) | 1,089 | Low | Lower-case all crop labels | Resolved |
+| AUD-10 | Dates | Plot | Missing values | 4 plots have no R3 date | 4 | Low | Leave missing; affects days-to-silking and rainfall window only | Resolved |
+| AUD-11 | Dates | Plot | V10 date present when a V10 dose is recorded | 115/399 (28.8%) V6+V10 plots lack a V10 date but have a quantity (22A: 115) | 115 | Medium | Keep missing dates; do not infer dates from quantities | Resolved |
+| AUD-12 | Values | Plot | Total = planting + V6 + V10 | 160 plots differ from the calculated total (range -1 to +1 kg/ha) | 160 | Low | Keep source total; add urea_total_calc and urea_total_diff | Resolved |
+| AUD-13 | Values | Plot | Yield plausibility (> 20 t/ha) | 1 plot(s) at 55 t/ha (next highest 11.36); likely a misplaced decimal point | 1 | High | Keep in the main analysis; report results with and without it | Resolved |
+| AUD-14 | Values | Field | Altitude plausibility (< 900 m) | 3 fields recorded at 0.26, 0, 0.26 m; Rwanda's lowest point is about 950 m (probable GPS default) | 3 | Medium | Set alt_clean to missing for these fields; keep original alt | Resolved |
+| AUD-15 | Values | Plot | Consistent category labels | 'Maize' and 'maize' both used (821 plots capitalised) | 821 | Low | Lower-case all crop labels | Resolved |
 | AUD-16 | Values | Plot | One description per treatment code | 1 treatment code(s) with two wordings (2 plots) | 2 | Low | Add treat_details_std (most common wording); analysis uses urea_rate_timing | Resolved |
-| AUD-17 | Missingness | Field | Missingness by season | Missingness depends on season, not on the field: slope_pos 0%-100%; rockness 0%-100%; soil_depth 0%-100%; trialfield_home_min 7%-100% | 281 | Medium | No imputation in the treatment model; median/most-frequent imputation inside CV folds for prediction only | Resolved |
-| AUD-18 | Missingness | Plot | Missingness by season | 28.8% missing overall; 21A 0%, 22A 60%, 22B 0% | 460 | Low | Keep blanks; not used as a predictor | Resolved |
-| AUD-19 | Coverage | Soil | Share of plots with a soil record | 736/1,598 (46.1%); by season 21A 25%, 22A 69%, 22B 24% | 862 | High | Keep all plots; has_soil_record flag; pH used only in soil-specific checks | Resolved |
-| AUD-20 | Coverage | Soil | Usable values | tot_N, org_C, sand are 100% empty | 736 | High | Fill from SoilGrids at field coordinates (scripts/fetch_soilgrids.py) as sg_* columns | Open - run enrichment locally |
+| AUD-17 | Missingness | Field | Missingness by season | Missingness depends on season, not on the field: slope_pos 0%-100%; rockness 0%-100%; soil_depth 0%-100%; trialfield_home_min 6%-100% | 279 | Medium | No imputation in the treatment model; median/most-frequent imputation inside CV folds for prediction only | Resolved |
+| AUD-18 | Missingness | Plot | Missingness by season | 30.1% missing overall; 21A 0%, 22A 62%, 22B 0% | 479 | Low | Keep blanks; not used as a predictor | Resolved |
+| AUD-19 | Coverage | Soil | Share of plots with a soil record | 685/1,590 (43.1%); by season 21A 75%, 22A 25%, 22B 37% | 905 | High | Keep all plots; has_soil_record flag; pH used only in soil-specific checks | Resolved |
+| AUD-20 | Coverage | Soil | Usable values | tot_N, org_C, sand are 100% empty | 685 | High | Fill from SoilGrids at field coordinates (scripts/fetch_soilgrids.py) as sg_* columns | Resolved |
 | AUD-21 | Coverage | Soil | Missing values within soil records | 2 soil records have no pH | 2 | Low | Leave missing | Resolved |
-| AUD-22 | Coverage | Plot | Weather data available | No weather data supplied | 1,598 | High | Add CHIRPS rainfall from planting to silking (scripts/fetch_chirps_rainfall.py) | Open - run enrichment locally |
+| AUD-22 | Coverage | Plot | Weather data available | No weather data supplied | 1,590 | High | Add CHIRPS rainfall from planting to silking (scripts/fetch_chirps_rainfall.py) | Open - run enrichment locally |
 
 ## Rationale
 
