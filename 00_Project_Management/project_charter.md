@@ -146,4 +146,4 @@ All plots also received DAP at 100 kg/ha at planting.
 
 ---
 
-<sub>**Use of AI tools.** Claude (Anthropic) was used to review the repository, refactor the notebook code into the `src/maize` pipeline, write tests and draft documentation. All analytical choices and results were checked by the analyst.</sub>
+
