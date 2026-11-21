@@ -137,12 +137,6 @@ All plots also received DAP at 100 kg/ha at planting.
 | Confirm the 55 t/ha record and the 3 plots where R3 is recorded before silking | Field / M&E team | Check paper forms or enumerator notes |
 | Confirm whether V10 Urea was applied in 22A | Field / M&E team | Check distribution records |
 
-## 11. Approval
-
-| Role | Name | Date |
-|---|---|---|
-| R&D lead, Evergreen | | |
-| Analyst | Vincent Okumu | |
 
 ---
 
